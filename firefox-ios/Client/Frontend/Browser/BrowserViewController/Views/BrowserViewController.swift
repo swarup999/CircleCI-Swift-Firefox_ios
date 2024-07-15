@@ -1276,6 +1276,10 @@ class BrowserViewController: UIViewController,
         browserDelegate?.show(webView: webView)
     }
 
+    func showErrorPage() {
+        browserDelegate?.showErrorPage(overlayManager: overlayManager)
+    }
+
     // MARK: - Microsurvey
     private func setupMicrosurvey() {
         guard featureFlags.isFeatureEnabled(.microsurvey, checking: .buildOnly), microsurvey == nil else { return }
@@ -1358,6 +1362,9 @@ class BrowserViewController: UIViewController,
 
     func updateInContentHomePanel(_ url: URL?, focusUrlBar: Bool = false) {
         let isAboutHomeURL = url.flatMap { InternalURL($0)?.isAboutHomeURL } ?? false
+
+        let isErrorURL = url.flatMap { InternalURL($0)?.isErrorPage } ?? false
+
         guard url != nil else {
             showEmbeddedWebview()
             if !isToolbarRefactorEnabled {
@@ -1368,6 +1375,8 @@ class BrowserViewController: UIViewController,
 
         if isAboutHomeURL {
             showEmbeddedHomepage(inline: true, isPrivate: tabManager.selectedTab?.isPrivate ?? false)
+        } else if isErrorURL {
+            showErrorPage()
         } else {
             showEmbeddedWebview()
             if !isToolbarRefactorEnabled {

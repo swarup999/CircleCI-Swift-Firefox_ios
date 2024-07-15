@@ -30,6 +30,7 @@ class BrowserCoordinator: BaseCoordinator,
     var webviewController: WebviewViewController?
     var homepageViewController: HomepageViewController?
     var privateViewController: PrivateHomepageViewController?
+    var errorViewController: ErrorPageViewController?
 
     private var profile: Profile
     private let tabManager: TabManager
@@ -126,6 +127,16 @@ class BrowserCoordinator: BaseCoordinator,
             return
         }
         self.privateViewController = privateHomepageController
+    }
+
+    func showErrorPage(overlayManager: OverlayModeManager) {
+        let errorpageController = ErrorPageViewController(windowUUID: windowUUID, overlayManager: overlayManager)
+//        errorpageController.parentCoordinator = self
+        guard browserViewController.embedContent(errorpageController) else {
+            logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
+            return
+        }
+        self.errorViewController = errorpageController
     }
 
     // MARK: - PrivateHomepageDelegate

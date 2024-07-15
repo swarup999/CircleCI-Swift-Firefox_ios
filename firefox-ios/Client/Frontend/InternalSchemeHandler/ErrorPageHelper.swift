@@ -152,79 +152,93 @@ class ErrorPageHandler: InternalSchemeResponse {
     static let path = InternalURL.Path.errorpage.rawValue
 
     func response(forRequest request: URLRequest) -> (URLResponse, Data)? {
-        guard let requestUrl = request.url,
-              let originalUrl = InternalURL(requestUrl)?.originalURLFromErrorPage
-        else { return nil }
+//        guard let requestUrl = request.url,
+//              let originalUrl = InternalURL(requestUrl)?.originalURLFromErrorPage
+//        else { return nil }
+//
+//        guard let url = request.url,
+//            let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
+//            let code = components.valueForQuery("code"),
+//            let errCode = Int(code),
+//            let errDescription = components.valueForQuery("description"),
+//            let errURLDomain = originalUrl.host,
+//            var errDomain = components.valueForQuery("domain") else {
+//                return nil
+//        }
+//
+//        var asset = Bundle.main.path(forResource: "NetError", ofType: "html")
+//        var variables = [
+//            "error_code": "\(errCode)",
+//            "error_title": errDescription,
+//            "short_description": errDomain,
+//            ]
+//
+//        let tryAgain: String = .ErrorPageTryAgain
+//        // swiftlint:disable line_length
+//        var actions = "<script>function reloader() { location.replace((new URL(location.href)).searchParams.get(\"url\")); }" +
+//                    "</script><button onclick='reloader()'>\(tryAgain)</button>"
+//        // swiftlint:enable line_length
+//
+//        if errDomain == kCFErrorDomainCFNetwork as String {
+//            if let code = CFNetworkErrors(rawValue: Int32(errCode)) {
+//                errDomain = cfErrorToName(code)
+//            }
+//        } else if errDomain == MozDomain {
+//            if errCode == MozErrorDownloadsNotEnabled {
+//                let downloadInSafari: String = .ErrorPageOpenInSafari
+//
+//                // Overwrite the normal try-again action.
+//                actions = "<button onclick='webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageOpenInSafari)\"})'>\(downloadInSafari)</button>"
+//            }
+//            errDomain = ""
+//        } else if CertErrors.contains(errCode) {
+//            guard let url = request.url,
+//                  let comp = URLComponents(url: url, resolvingAgainstBaseURL: false),
+//                  let certError = comp.valueForQuery("certerror")
+//            else {
+//                assertionFailure("Error unwrapping the cert error")
+//                return nil
+//            }
+//
+//            asset = Bundle.main.path(forResource: "CertError", ofType: "html")
+//            actions = "<button onclick='history.back()'>\(String.ErrorPagesGoBackButton)</button>"
+//            variables["error_title"] = .ErrorPagesCertWarningTitle
+//            variables["cert_error"] = certError
+//            variables["long_description"] = String(format: .ErrorPagesCertWarningDescription, "<b>\(errURLDomain)</b>")
+//            variables["advanced_button"] = .ErrorPagesAdvancedButton
+//            variables["warning_description"] = .ErrorPagesCertWarningDescription
+//            variables["warning_advanced1"] = .ErrorPagesAdvancedWarning1
+//            variables["warning_advanced2"] = .ErrorPagesAdvancedWarning2
+//            variables["warning_actions"] =
+//                "<p><a id='\(UserScriptManager.appIdToken)__firefox__visitOnce' href='#'>\(String.ErrorPagesVisitOnceButton)</button></p>"
+//        }
+//
+//        variables["actions"] = actions
+//
+//        let response = InternalSchemeHandler.response(forUrl: originalUrl)
+//        guard let file = asset, var html = try? String(contentsOfFile: file) else {
+//            assertionFailure("Error unwrapping html from file contents")
+//            return nil
+//        }
+//
+//        variables.forEach { (arg, value) in
+//            html = html.replacingOccurrences(of: "%\(arg)%", with: value)
+//        }
+//
+//        guard let data = html.data(using: .utf8) else { return nil }
+//        return (response, data)
 
-        guard let url = request.url,
-            let components = URLComponents(url: url, resolvingAgainstBaseURL: false),
-            let code = components.valueForQuery("code"),
-            let errCode = Int(code),
-            let errDescription = components.valueForQuery("description"),
-            let errURLDomain = originalUrl.host,
-            var errDomain = components.valueForQuery("domain") else {
-                return nil
-        }
-
-        var asset = Bundle.main.path(forResource: "NetError", ofType: "html")
-        var variables = [
-            "error_code": "\(errCode)",
-            "error_title": errDescription,
-            "short_description": errDomain,
-            ]
-
-        let tryAgain: String = .ErrorPageTryAgain
-        // swiftlint:disable line_length
-        var actions = "<script>function reloader() { location.replace((new URL(location.href)).searchParams.get(\"url\")); }" +
-                    "</script><button onclick='reloader()'>\(tryAgain)</button>"
-        // swiftlint:enable line_length
-
-        if errDomain == kCFErrorDomainCFNetwork as String {
-            if let code = CFNetworkErrors(rawValue: Int32(errCode)) {
-                errDomain = cfErrorToName(code)
-            }
-        } else if errDomain == MozDomain {
-            if errCode == MozErrorDownloadsNotEnabled {
-                let downloadInSafari: String = .ErrorPageOpenInSafari
-
-                // Overwrite the normal try-again action.
-                actions = "<button onclick='webkit.messageHandlers.errorPageHelperMessageManager.postMessage({type: \"\(MessageOpenInSafari)\"})'>\(downloadInSafari)</button>"
-            }
-            errDomain = ""
-        } else if CertErrors.contains(errCode) {
-            guard let url = request.url,
-                  let comp = URLComponents(url: url, resolvingAgainstBaseURL: false),
-                  let certError = comp.valueForQuery("certerror")
-            else {
-                assertionFailure("Error unwrapping the cert error")
-                return nil
-            }
-
-            asset = Bundle.main.path(forResource: "CertError", ofType: "html")
-            actions = "<button onclick='history.back()'>\(String.ErrorPagesGoBackButton)</button>"
-            variables["error_title"] = .ErrorPagesCertWarningTitle
-            variables["cert_error"] = certError
-            variables["long_description"] = String(format: .ErrorPagesCertWarningDescription, "<b>\(errURLDomain)</b>")
-            variables["advanced_button"] = .ErrorPagesAdvancedButton
-            variables["warning_description"] = .ErrorPagesCertWarningDescription
-            variables["warning_advanced1"] = .ErrorPagesAdvancedWarning1
-            variables["warning_advanced2"] = .ErrorPagesAdvancedWarning2
-            variables["warning_actions"] =
-                "<p><a id='\(UserScriptManager.appIdToken)__firefox__visitOnce' href='#'>\(String.ErrorPagesVisitOnceButton)</button></p>"
-        }
-
-        variables["actions"] = actions
-
-        let response = InternalSchemeHandler.response(forUrl: originalUrl)
-        guard let file = asset, var html = try? String(contentsOfFile: file) else {
-            assertionFailure("Error unwrapping html from file contents")
-            return nil
-        }
-
-        variables.forEach { (arg, value) in
-            html = html.replacingOccurrences(of: "%\(arg)%", with: value)
-        }
-
+        guard let url = request.url else { return nil }
+        let response = InternalSchemeHandler.response(forUrl: url)
+        let backgroundColor = UIColor.systemGray.hexString
+        // Blank page with a color matching the background of the panels which
+        // is displayed for a split-second until the panel shows.
+        let html = """
+            <!DOCTYPE html>
+            <html>
+              <body style='background-color:\(backgroundColor)'></body>
+            </html>
+        """
         guard let data = html.data(using: .utf8) else { return nil }
         return (response, data)
     }
