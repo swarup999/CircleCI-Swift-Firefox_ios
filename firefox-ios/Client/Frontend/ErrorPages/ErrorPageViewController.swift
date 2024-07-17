@@ -47,75 +47,81 @@ class ErrorPageViewController:
         fatalError("init(coder:) has not been implemented")
     }
 
+    let imageView = UIView()
+    let messageLabel = UILabel()
+    let reloadButton = UIButton(type: .system)
+
     override func viewDidLoad() {
-        super.viewDidLoad()
+           super.viewDidLoad()
 
-        // Background color
-        view.backgroundColor = .white
+           // Set background color
+           view.backgroundColor = .white
 
-        // Cute Logo Image
-        let logoImageView = UIView()
-        logoImageView.backgroundColor = .blue
-        logoImageView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(logoImageView)
+           // Image View Configuration
+           imageView.backgroundColor = .systemBlue
+           imageView.translatesAutoresizingMaskIntoConstraints = false
+           view.addSubview(imageView)
 
-        // Error message
-        let errorMessageLabel = UILabel()
-        errorMessageLabel.text = "Looks like there's a problem with your internet connection."
-        errorMessageLabel.textAlignment = .center
-        errorMessageLabel.numberOfLines = 0
-        errorMessageLabel.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        errorMessageLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(errorMessageLabel)
+           // Message Label Configuration
+           messageLabel.text = "Looks like there’s a problem with your internet connection.\n\nTry connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi."
+           messageLabel.numberOfLines = 0
+           messageLabel.textAlignment = .center
+           messageLabel.translatesAutoresizingMaskIntoConstraints = false
+           view.addSubview(messageLabel)
 
-        // Instruction message
-        let instructionLabel = UILabel()
-        instructionLabel.text = "Try connecting on a different device. Check your modem or router. Disconnect and reconnect to Wi-Fi."
-        instructionLabel.textAlignment = .center
-        instructionLabel.numberOfLines = 0
-        instructionLabel.font = UIFont.systemFont(ofSize: 16)
-        instructionLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(instructionLabel)
+           // Reload Button Configuration
+           reloadButton.setTitle("Reload", for: .normal)
+           reloadButton.backgroundColor = .systemBlue
+           reloadButton.setTitleColor(.white, for: .normal)
+           reloadButton.layer.cornerRadius = 5
+           reloadButton.translatesAutoresizingMaskIntoConstraints = false
+           view.addSubview(reloadButton)
 
-        // Reload button
-        let reloadButton = UIButton(type: .system)
-        reloadButton.setTitle("Reload", for: .normal)
-        reloadButton.backgroundColor = .blue
-        reloadButton.setTitleColor(.white, for: .normal)
-        reloadButton.layer.cornerRadius = 10
-        reloadButton.addTarget(self, action: #selector(reloadButtonTapped), for: .touchUpInside)
-        reloadButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(reloadButton)
+           // Constraints
+           setupConstraints()
+       }
 
-        // Constraints
-        NSLayoutConstraint.activate([
-            // Logo Image
-            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
-            logoImageView.widthAnchor.constraint(equalToConstant: 100),
-            logoImageView.heightAnchor.constraint(equalToConstant: 100),
+       override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+           super.viewWillTransition(to: size, with: coordinator)
+           setupConstraints()
+       }
 
-            // Error Message
-            errorMessageLabel.topAnchor.constraint(equalTo: logoImageView.bottomAnchor, constant: 30),
-            errorMessageLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            errorMessageLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+       func setupConstraints() {
+           let isPortrait = UIDevice.current.orientation.isPortrait
 
-            // Instruction Message
-            instructionLabel.topAnchor.constraint(equalTo: errorMessageLabel.bottomAnchor, constant: 20),
-            instructionLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            instructionLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+           // Remove existing constraints
+           view.removeConstraints(view.constraints)
 
-            // Reload Button
-            reloadButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -50),
-            reloadButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            reloadButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            reloadButton.heightAnchor.constraint(equalToConstant: 50)
-        ])
-    }
+           // Common Constraints
+           NSLayoutConstraint.activate([
+               imageView.widthAnchor.constraint(equalToConstant: 100),
+               imageView.heightAnchor.constraint(equalToConstant: 100),
+               reloadButton.heightAnchor.constraint(equalToConstant: 50),
+               reloadButton.widthAnchor.constraint(equalToConstant: 200)
+           ])
 
-    @objc
-    func reloadButtonTapped() {
-        // Reload action
-        print("Reload button tapped")
-    }
-}
+           if isPortrait {
+               // Portrait Constraints
+               NSLayoutConstraint.activate([
+                   imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                   imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100),
+                   messageLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
+                   messageLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+                   messageLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+                   reloadButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 20),
+                   reloadButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+               ])
+           } else {
+               // Landscape Constraints
+               NSLayoutConstraint.activate([
+                   imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+                   imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                   messageLabel.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 20),
+                   messageLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+                   messageLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                   reloadButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 20),
+                   reloadButton.centerXAnchor.constraint(equalTo: messageLabel.centerXAnchor)
+               ])
+           }
+       }
+   }
