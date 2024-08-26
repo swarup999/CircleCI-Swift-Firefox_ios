@@ -718,7 +718,9 @@ class BrowserCoordinator: BaseCoordinator,
 
     func showNativeErrorPage(overlayManager: OverlayModeManager) {
         let errorPageModel = ErrorPageModel(errorTitle: "", errorDecription: "", errorCode: "")
-        let errorpageController = NativeErrorPageViewController(model: errorPageModel, windowUUID: windowUUID, overlayManager: overlayManager)
+        let errorpageController = NativeErrorPageViewController(model: errorPageModel,
+                                                                windowUUID: windowUUID,
+                                                                overlayManager: overlayManager)
 //        errorpageController.parentCoordinator = self
         guard browserViewController.embedContent(errorpageController) else {
             logger.log("Unable to embed private homepage", level: .debug, category: .coordinator)
