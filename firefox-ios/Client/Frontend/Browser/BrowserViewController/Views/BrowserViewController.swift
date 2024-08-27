@@ -1396,6 +1396,8 @@ class BrowserViewController: UIViewController,
                    category: .coordinator)
 
         switch browserViewType {
+        case .nativeErrorPage:
+            showEmbeddedNativeErrorPage()
         case .normalHomepage:
             showEmbeddedHomepage(inline: true, isPrivate: false)
         case .privateHomepage:
