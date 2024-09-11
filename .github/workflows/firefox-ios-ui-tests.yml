@@ -208,6 +208,7 @@ jobs:
       name: Run full functional tests
       runs-on: macos-14
       needs: run-smoketests
+      if: always()
       strategy:
         fail-fast: false
         matrix:
