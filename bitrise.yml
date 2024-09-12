@@ -835,6 +835,10 @@ workflows:
             fastlane -version
 
             ./firefox-ios/l10n-screenshots.sh en-US
+
+            # Remove test results from derived data folder.
+            # Test results may not be needed afterwards.
+            rm -fr ./l10n-screenshots-dd/Logs/Test/*
         title: Generate screenshots
     - deploy-to-bitrise-io@1.10:
         inputs:
