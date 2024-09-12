@@ -840,11 +840,11 @@ workflows:
             # Test results may not be needed afterwards.
             rm -fr ./l10n-screenshots-dd/Logs/Test/*
         title: Generate screenshots
-    - deploy-to-bitrise-io@1.10:
+    - deploy-to-bitrise-io@2.9.2:
         inputs:
         - deploy_path: l10n-screenshots-dd/
         - is_compress: 'true'
-    - deploy-to-bitrise-io@1.10:
+    - deploy-to-bitrise-io@2.9.2:
         inputs:
         - deploy_path: l10n-screenshots/en-US/en-US
         - is_compress: 'true'
