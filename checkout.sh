@@ -5,6 +5,9 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 set -x
+
+(cd BrowserKit && swift run)
+
 cd focus-ios
 
 # Version 107.0 hash
@@ -17,5 +20,3 @@ curl --proto '=https' --tlsv1.2 -sSf  https://raw.githubusercontent.com/mozilla/
 # Clone shavar prod list
 cd .. # Make sure we are at the root of the repo
 rm -rf shavar-prod-lists && git clone https://github.com/mozilla-services/shavar-prod-lists.git && git -C shavar-prod-lists checkout $SHAVAR_COMMIT_HASH
-
-(cd BrowserKit && swift run)
