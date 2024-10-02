@@ -9,7 +9,7 @@ env:
     browser: focus-ios
     xcode_version: 16.0
     ios_version: 18.0
-    ios_simulator_default: iPhone 16
+    ios_simulator_default: iPhone 15
     xcodebuild_scheme: Focus
     xcodebuild_target: XCUITest
     test_results_directory: /Users/runner/tmp
@@ -17,7 +17,7 @@ env:
 jobs:
     compile:
         name: Compile
-        runs-on: macos-15
+        runs-on: macos-14
         steps:
             - name: Check out source code
               uses: actions/checkout@v4.1.7
