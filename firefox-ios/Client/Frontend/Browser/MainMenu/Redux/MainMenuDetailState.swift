@@ -7,18 +7,24 @@ import MenuKit
 import Shared
 import Redux
 
-struct MainMenuDetailsState: ScreenState, Equatable {
+protocol Updating {
+    associatedtype UpdateData
+    func updating(with data: UpdateData) -> Self
+    func withoutUpdates() -> Self
+}
+
+struct MainMenuDetailsState: ScreenState, Equatable, Updating {
     var windowUUID: WindowUUID
     var menuElements: [MenuSection]
     var shouldDismiss: Bool
+    var shouldGoBackToMainMenu: Bool
+    var navigationDestination: MainMenuNavigationDestination?
+    var submenuType: MainMenuDetailsViewType?
 
     var title: String {
         typealias Titles = String.MainMenu.ToolsSection
         return submenuType == .tools ? Titles.Tools : Titles.Save
     }
-
-    var navigationDestination: MainMenuNavigationDestination?
-    var submenuType: MainMenuDetailsViewType?
 
     private let menuConfigurator = MainMenuConfigurationUtility()
 
@@ -37,7 +43,8 @@ struct MainMenuDetailsState: ScreenState, Equatable {
             menuElements: currentState.menuElements,
             submenuType: currentState.submenuType,
             navigationDestination: currentState.navigationDestination,
-            shouldDismiss: currentState.shouldDismiss
+            shouldDismiss: currentState.shouldDismiss,
+            shouldGoBackToMainMenu: currentState.shouldGoBackToMainMenu
         )
     }
 
@@ -47,7 +54,8 @@ struct MainMenuDetailsState: ScreenState, Equatable {
             menuElements: [],
             submenuType: nil,
             navigationDestination: nil,
-            shouldDismiss: false
+            shouldDismiss: false,
+            shouldGoBackToMainMenu: false
         )
     }
 
@@ -55,24 +63,66 @@ struct MainMenuDetailsState: ScreenState, Equatable {
         windowUUID: WindowUUID,
         menuElements: [MenuSection],
         submenuType: MainMenuDetailsViewType?,
-        navigationDestination: MainMenuNavigationDestination? = nil,
-        shouldDismiss: Bool = false
+        navigationDestination: MainMenuNavigationDestination?,
+        shouldDismiss: Bool,
+        shouldGoBackToMainMenu: Bool
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
         self.submenuType = submenuType
         self.navigationDestination = navigationDestination
         self.shouldDismiss = shouldDismiss
+        self.shouldGoBackToMainMenu = shouldGoBackToMainMenu
     }
 
+    // MARK: - Updating protocol
+    struct UpdateData {
+        let menuElements: [MenuSection]?
+        let shouldDismiss: Bool
+        let shouldGoBackToMainMenu: Bool
+        let submenuType: MainMenuDetailsViewType?
+
+        init(
+            menuElements: [MenuSection]? = nil,
+            shouldDismiss: Bool = false,
+            shouldGoBackToMainMenu: Bool = false,
+            submenuType: MainMenuDetailsViewType? = nil
+        ) {
+            self.menuElements = menuElements
+            self.shouldDismiss = shouldDismiss
+            self.shouldGoBackToMainMenu = shouldGoBackToMainMenu
+            self.submenuType = submenuType
+        }
+    }
+
+    func updating(with data: MainMenuDetailsState.UpdateData) -> MainMenuDetailsState {
+        return MainMenuDetailsState(
+            windowUUID: self.windowUUID,
+            menuElements: data.menuElements ?? self.menuElements,
+            submenuType: data.submenuType ?? self.submenuType,
+            navigationDestination: nil,
+            shouldDismiss: data.shouldDismiss,
+            shouldGoBackToMainMenu: data.shouldGoBackToMainMenu
+        )
+    }
+
+    func withoutUpdates() -> MainMenuDetailsState {
+        return MainMenuDetailsState(
+            windowUUID: windowUUID,
+            menuElements: menuElements,
+            submenuType: submenuType,
+            navigationDestination: nil,
+            shouldDismiss: false,
+            shouldGoBackToMainMenu: false
+        )
+    }
+
+    // MARK: - Reducer
     static let reducer: Reducer<Self> = { state, action in
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                submenuType: state.submenuType
-            )
+            return state.withoutUpdates()
         }
+        typealias UpdateData = MainMenuDetailsState.UpdateData
 
         switch action.actionType {
         case ScreenActionType.showScreen:
@@ -84,30 +134,26 @@ struct MainMenuDetailsState: ScreenState, Equatable {
                     window: action.windowUUID),
                   let currentTabInfo = menuState.currentTabInfo,
                   let currentSubmenu = menuState.currentSubmenuView
-            else { return state }
+            else {
+                return state.withoutUpdates()
+            }
 
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuConfigurator.generateMenuElements(
-                    with: currentTabInfo,
-                    for: currentSubmenu,
-                    and: action.windowUUID
-                ),
-                submenuType: currentSubmenu
+            return state.updating(
+                with: UpdateData(
+                    menuElements: state.menuConfigurator.generateMenuElements(
+                        with: currentTabInfo,
+                        for: currentSubmenu,
+                        and: action.windowUUID
+                    ),
+                    submenuType: currentSubmenu
+                )
             )
+        case MainMenuDetailsActionType.backToMainMenu:
+            return state.updating(with: UpdateData(shouldGoBackToMainMenu: true))
         case MainMenuDetailsActionType.dismissView:
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                submenuType: state.submenuType,
-                shouldDismiss: true
-            )
+            return state.updating(with: UpdateData(shouldDismiss: true))
         default:
-            return MainMenuDetailsState(
-                windowUUID: state.windowUUID,
-                menuElements: state.menuElements,
-                submenuType: state.submenuType
-            )
+            return state.withoutUpdates()
         }
     }
 }
