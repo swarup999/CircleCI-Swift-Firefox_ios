@@ -7,6 +7,9 @@ import MenuKit
 import Shared
 import Redux
 
+// This would live on `ScreenState`, rather than each individual state
+// But I just applied it here to keep the proposal small.
+// With, likely, better naming.
 protocol Updating {
     associatedtype UpdateData
     func updating(with data: UpdateData) -> Self
@@ -14,11 +17,11 @@ protocol Updating {
 }
 
 struct MainMenuDetailsState: ScreenState, Equatable, Updating {
+    // at first, we do the regular setup for state stuff
     var windowUUID: WindowUUID
     var menuElements: [MenuSection]
     var shouldDismiss: Bool
     var shouldGoBackToMainMenu: Bool
-    var navigationDestination: MainMenuNavigationDestination?
     var submenuType: MainMenuDetailsViewType?
 
     var title: String {
@@ -42,7 +45,6 @@ struct MainMenuDetailsState: ScreenState, Equatable, Updating {
             windowUUID: currentState.windowUUID,
             menuElements: currentState.menuElements,
             submenuType: currentState.submenuType,
-            navigationDestination: currentState.navigationDestination,
             shouldDismiss: currentState.shouldDismiss,
             shouldGoBackToMainMenu: currentState.shouldGoBackToMainMenu
         )
@@ -53,39 +55,49 @@ struct MainMenuDetailsState: ScreenState, Equatable, Updating {
             windowUUID: windowUUID,
             menuElements: [],
             submenuType: nil,
-            navigationDestination: nil,
             shouldDismiss: false,
             shouldGoBackToMainMenu: false
         )
     }
 
+    // We remove the default initializers from here, because we already provide
+    // a default starting point with the `init` and then we provide separate
+    // defaults with the `Updating` stuff.
     private init(
         windowUUID: WindowUUID,
         menuElements: [MenuSection],
         submenuType: MainMenuDetailsViewType?,
-        navigationDestination: MainMenuNavigationDestination?,
         shouldDismiss: Bool,
         shouldGoBackToMainMenu: Bool
     ) {
         self.windowUUID = windowUUID
         self.menuElements = menuElements
         self.submenuType = submenuType
-        self.navigationDestination = navigationDestination
         self.shouldDismiss = shouldDismiss
         self.shouldGoBackToMainMenu = shouldGoBackToMainMenu
     }
 
     // MARK: - Updating protocol
-    struct UpdateData {
+    // makes associated type easier to type
+    typealias UpdateData = MainMenuDetailsState.UpdateableData
+
+    // Specifiy the updating data associated type for each state individually.
+    // We have to specify `nil` in the initializer because Swift is a dumb
+    // language sometimes, and, cannot infer that these can just be nil
+    // in the initializer by marking them optional or the compiler yells at you
+    // about arguments. le sigh
+    struct UpdateableData {
+        // we only add elements that are updateable for the state. For example,
+        // window UUID never changes, so we don't actually update that
         let menuElements: [MenuSection]?
-        let shouldDismiss: Bool
-        let shouldGoBackToMainMenu: Bool
+        let shouldDismiss: Bool?
+        let shouldGoBackToMainMenu: Bool?
         let submenuType: MainMenuDetailsViewType?
 
         init(
             menuElements: [MenuSection]? = nil,
-            shouldDismiss: Bool = false,
-            shouldGoBackToMainMenu: Bool = false,
+            shouldDismiss: Bool? = nil,
+            shouldGoBackToMainMenu: Bool? = nil,
             submenuType: MainMenuDetailsViewType? = nil
         ) {
             self.menuElements = menuElements
@@ -95,23 +107,26 @@ struct MainMenuDetailsState: ScreenState, Equatable, Updating {
         }
     }
 
+    // this is used when making one or more in the state. We also provide
+    // the default initializer, basically, for the updating condition.
     func updating(with data: MainMenuDetailsState.UpdateData) -> MainMenuDetailsState {
         return MainMenuDetailsState(
             windowUUID: self.windowUUID,
             menuElements: data.menuElements ?? self.menuElements,
             submenuType: data.submenuType ?? self.submenuType,
-            navigationDestination: nil,
-            shouldDismiss: data.shouldDismiss,
-            shouldGoBackToMainMenu: data.shouldGoBackToMainMenu
+            shouldDismiss: data.shouldDismiss ?? false,
+            shouldGoBackToMainMenu: data.shouldGoBackToMainMenu ?? false
         )
     }
 
+    // used for when we don't have any updates to the state. Acting as an exit
+    // type function, returning a default implementation of state that we want
+    // on any non-updating returns
     func withoutUpdates() -> MainMenuDetailsState {
         return MainMenuDetailsState(
             windowUUID: windowUUID,
             menuElements: menuElements,
             submenuType: submenuType,
-            navigationDestination: nil,
             shouldDismiss: false,
             shouldGoBackToMainMenu: false
         )
@@ -122,7 +137,6 @@ struct MainMenuDetailsState: ScreenState, Equatable, Updating {
         guard action.windowUUID == .unavailable || action.windowUUID == state.windowUUID else {
             return state.withoutUpdates()
         }
-        typealias UpdateData = MainMenuDetailsState.UpdateData
 
         switch action.actionType {
         case ScreenActionType.showScreen:
