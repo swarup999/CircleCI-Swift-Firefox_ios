@@ -11,7 +11,6 @@ public func makeURLSession(
     timeout: TimeInterval? = nil
 ) -> URLSession {
     configuration.httpAdditionalHeaders = ["User-Agent": userAgent]
-    configuration.multipathServiceType = .handover
     if let t = timeout {
         configuration.timeoutIntervalForRequest = t
     }

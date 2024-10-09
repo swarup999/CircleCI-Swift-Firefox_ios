@@ -22,7 +22,7 @@ class SearchSuggestClient {
 
     fileprivate lazy var urlSession: URLSession = makeURLSession(
         userAgent: self.userAgent,
-        configuration: URLSessionConfiguration.ephemeralMPTCP
+        configuration: URLSessionConfiguration.ephemeral
     )
 
     init(searchEngine: OpenSearchEngine, userAgent: String) {

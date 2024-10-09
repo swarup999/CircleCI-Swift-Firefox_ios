@@ -3904,7 +3904,7 @@ extension BrowserViewController {
     func getImageData(_ url: URL, success: @escaping (Data) -> Void) {
         makeURLSession(
             userAgent: UserAgent.fxaUserAgent,
-            configuration: URLSessionConfiguration.defaultMPTCP).dataTask(with: url
+            configuration: URLSessionConfiguration.default).dataTask(with: url
             ) { (data, response, error) in
             if validatedHTTPResponse(response, statusCode: 200..<300) != nil,
                let data = data {

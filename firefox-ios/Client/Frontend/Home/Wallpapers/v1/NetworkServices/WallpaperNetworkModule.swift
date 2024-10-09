@@ -8,7 +8,7 @@ import Shared
 class WallpaperNetworkingModule: WallpaperNetworking {
     private var urlSession: URLSessionProtocol
 
-    init(with urlSession: URLSessionProtocol = URLSession.sharedMPTCP) {
+    init(with urlSession: URLSessionProtocol = URLSession.shared) {
         self.urlSession = urlSession
     }
 

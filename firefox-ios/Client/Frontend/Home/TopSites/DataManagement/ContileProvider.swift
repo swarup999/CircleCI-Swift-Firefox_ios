@@ -35,7 +35,7 @@ class ContileProvider: ContileProviderInterface, URLCaching, FeatureFlaggable {
     init(
         networking: ContileNetworking = DefaultContileNetwork(
             with: makeURLSession(userAgent: UserAgent.mobileUserAgent(),
-                                 configuration: URLSessionConfiguration.defaultMPTCP)),
+                                 configuration: URLSessionConfiguration.default)),
         urlCache: URLCache = URLCache.shared,
         logger: Logger = DefaultLogger.shared
     ) {

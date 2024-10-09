@@ -23,7 +23,7 @@ class TemporaryDocument: NSObject {
         super.init()
 
         self.session = URLSession(
-            configuration: .defaultMPTCP,
+            configuration: .default,
             delegate: nil,
             delegateQueue: temporaryDocumentOperationQueue
         )
