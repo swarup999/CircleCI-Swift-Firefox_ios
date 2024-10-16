@@ -150,8 +150,12 @@ class BrowserCoordinator: BaseCoordinator,
         self.privateViewController = privateHomepageController
     }
 
-    // MARK: - PrivateHomepageDelegate
+    // MARK: - HomepageCoordinatorDelegate
+    func homePanel(with url: URL, visitType: VisitType, isGoogleTopSite: Bool) {
+        browserViewController.homePanel(didSelectURL: url, visitType: visitType, isGoogleTopSite: isGoogleTopSite)
+    }
 
+    // MARK: - PrivateHomepageDelegate
     func homePanelDidRequestToOpenInNewTab(with url: URL, isPrivate: Bool, selectNewTab: Bool) {
         browserViewController.homePanelDidRequestToOpenInNewTab(
             url,

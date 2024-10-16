@@ -5,29 +5,51 @@
 import Common
 import Foundation
 import Redux
+import Shared
+
+struct SectionHeaderState: Equatable {
+    var sectionHeaderTitle: String
+    var sectionTitleA11yIdentifier: String
+    var isSectionHeaderButtonHidden: Bool
+    var sectionHeaderColor: UIColor
+    var sectionButtonA11yIdentifier: String?
+}
+
+struct PocketDiscoverState: Equatable {
+    var title: String
+    var url: URL?
+}
 
 /// State for the pocket section that is used in the homepage
 struct PocketState: StateType, Equatable {
     var windowUUID: WindowUUID
-    var pocketData: [PocketItem]
-    var pocketDiscoverTitle: String
+    var pocketData: [PocketStoryState]
+    var pocketDiscoverItem = PocketDiscoverState(
+        title: .FirefoxHomepage.Pocket.DiscoverMore,
+        url: PocketProvider.MoreStoriesURL
+    )
+    // TODO: FXIOS-10312 Update color for section header when wallpaper is configured with redux
+    var sectionHeaderState = SectionHeaderState(
+        sectionHeaderTitle: .FirefoxHomepage.Pocket.SectionTitle,
+        sectionTitleA11yIdentifier: AccessibilityIdentifiers.FirefoxHomepage.SectionTitles.pocket,
+        isSectionHeaderButtonHidden: true,
+        sectionHeaderColor: .systemRed)
+
+    var footerURL: URL? = SupportUtils.URLForPocketLearnMore
 
     init(windowUUID: WindowUUID) {
         self.init(
             windowUUID: windowUUID,
-            pocketData: [],
-            pocketDiscoverTitle: ""
+            pocketData: []
         )
     }
 
     private init(
         windowUUID: WindowUUID,
-        pocketData: [PocketItem],
-        pocketDiscoverTitle: String
+        pocketData: [PocketStoryState]
     ) {
         self.windowUUID = windowUUID
         self.pocketData = pocketData
-        self.pocketDiscoverTitle = pocketDiscoverTitle
     }
 
     static let reducer: Reducer<Self> = { state, action in
@@ -35,8 +57,7 @@ struct PocketState: StateType, Equatable {
         else {
             return PocketState(
                 windowUUID: state.windowUUID,
-                pocketData: state.pocketData,
-                pocketDiscoverTitle: state.pocketDiscoverTitle
+                pocketData: state.pocketData
             )
         }
 
@@ -47,21 +68,18 @@ struct PocketState: StateType, Equatable {
             else {
                 return PocketState(
                     windowUUID: state.windowUUID,
-                    pocketData: state.pocketData,
-                    pocketDiscoverTitle: state.pocketDiscoverTitle
+                    pocketData: state.pocketData
                 )
             }
 
             return PocketState(
                 windowUUID: state.windowUUID,
-                pocketData: stories,
-                pocketDiscoverTitle: .FirefoxHomepage.Pocket.DiscoverMore
+                pocketData: stories
             )
         default:
             return PocketState(
                 windowUUID: state.windowUUID,
-                pocketData: state.pocketData,
-                pocketDiscoverTitle: state.pocketDiscoverTitle
+                pocketData: state.pocketData
             )
         }
     }

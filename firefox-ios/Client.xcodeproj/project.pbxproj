@@ -424,7 +424,7 @@
 		43A878FD27AB4A110071C372 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		43A878FE27AC39D30071C372 /* RustMozillaAppServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43BE578A278BA4D900491291 /* RustMozillaAppServices.framework */; };
 		43AB6FA225DC53D30016B015 /* GoogleTopSiteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9C25DC53D20016B015 /* GoogleTopSiteManager.swift */; };
-		43AB6FA425DC53D30016B015 /* LabelButtonHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9E25DC53D20016B015 /* LabelButtonHeaderView.swift */; };
+		43AB6FA425DC53D30016B015 /* LegacyLabelButtonHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43AB6F9E25DC53D20016B015 /* LegacyLabelButtonHeaderView.swift */; };
 		43B137F223A181A200CB7FA0 /* NSUserDefaultsPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43B137F123A181A200CB7FA0 /* NSUserDefaultsPrefs.swift */; };
 		43B296312B305F1E00A5AA9B /* ContextualHints.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43B2962F2B305F1E00A5AA9B /* ContextualHints.strings */; };
 		43B296342B305F1E00A5AA9B /* CredentialProvider.strings in Resources */ = {isa = PBXBuildFile; fileRef = 43B296322B305F1E00A5AA9B /* CredentialProvider.strings */; };
@@ -760,8 +760,9 @@
 		8A454D2E2CB81668009436D9 /* PocketAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D2D2CB81668009436D9 /* PocketAction.swift */; };
 		8A454D302CB81697009436D9 /* PocketMiddleware.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D2F2CB81697009436D9 /* PocketMiddleware.swift */; };
 		8A454D322CB8170D009436D9 /* PocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D312CB8170D009436D9 /* PocketManager.swift */; };
-		8A454D362CB86993009436D9 /* PocketItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D352CB86993009436D9 /* PocketItem.swift */; };
+		8A454D362CB86993009436D9 /* PocketStoryState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D352CB86993009436D9 /* PocketStoryState.swift */; };
 		8A454D372CB86B86009436D9 /* PocketStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D332CB85C7D009436D9 /* PocketStateTests.swift */; };
+		8A454D3C2CB9B061009436D9 /* LabelButtonHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A454D3B2CB9B061009436D9 /* LabelButtonHeaderView.swift */; };
 		8A4593C72BF7BECA002758DE /* MicrosurveyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C32BF7BEC9002758DE /* MicrosurveyTableViewCell.swift */; };
 		8A4593C82BF7BECA002758DE /* MicrosurveyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C42BF7BECA002758DE /* MicrosurveyViewController.swift */; };
 		8A4593C92BF7BECA002758DE /* MicrosurveyTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A4593C52BF7BECA002758DE /* MicrosurveyTableHeaderView.swift */; };
@@ -861,6 +862,8 @@
 		8A8BAE122B2107E400D774EB /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8BAE112B2107E400D774EB /* GCDWebServers */; };
 		8A8BAE142B21110000D774EB /* GCDWebServers in Frameworks */ = {isa = PBXBuildFile; productRef = 8A8BAE132B21110000D774EB /* GCDWebServers */; };
 		8A8BAE162B2119E600D774EB /* InternalURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8BAE152B2119E600D774EB /* InternalURL.swift */; };
+		8A8D277B2CBFFD710076AD3A /* BrowserNavigationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D277A2CBFFD710076AD3A /* BrowserNavigationType.swift */; };
+		8A8D277D2CC000BE0076AD3A /* NavigationBrowserAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8D277C2CC000BE0076AD3A /* NavigationBrowserAction.swift */; };
 		8A8DDEBF276259A900E7B97A /* RatingPromptManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */; };
 		8A93080927BFE88F0052167D /* PhotonActionSheetContainerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */; };
 		8A93080B27C01AD60052167D /* SingleActionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A93080A27C01AD60052167D /* SingleActionViewModel.swift */; };
@@ -5083,7 +5086,7 @@
 		43AB384A2C57B33900F19287 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Toolbar.strings; sourceTree = "<group>"; };
 		43AB48762CB3FD4100ABE599 /* is */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = is; path = is.lproj/PasswordGenerator.strings; sourceTree = "<group>"; };
 		43AB6F9C25DC53D20016B015 /* GoogleTopSiteManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GoogleTopSiteManager.swift; sourceTree = "<group>"; };
-		43AB6F9E25DC53D20016B015 /* LabelButtonHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelButtonHeaderView.swift; sourceTree = "<group>"; };
+		43AB6F9E25DC53D20016B015 /* LegacyLabelButtonHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LegacyLabelButtonHeaderView.swift; sourceTree = "<group>"; };
 		43AB6FA125DC53D30016B015 /* TopSiteHistoryManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TopSiteHistoryManager.swift; sourceTree = "<group>"; };
 		43AB70DD2AC1A42500BB31DA /* sat-Olck */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "sat-Olck"; path = "sat-Olck.lproj/TabLocation.strings"; sourceTree = "<group>"; };
 		43ABB40A29BA6A0400E2AC50 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Onboarding.strings; sourceTree = "<group>"; };
@@ -6945,7 +6948,8 @@
 		8A454D2F2CB81697009436D9 /* PocketMiddleware.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketMiddleware.swift; sourceTree = "<group>"; };
 		8A454D312CB8170D009436D9 /* PocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketManager.swift; sourceTree = "<group>"; };
 		8A454D332CB85C7D009436D9 /* PocketStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketStateTests.swift; sourceTree = "<group>"; };
-		8A454D352CB86993009436D9 /* PocketItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketItem.swift; sourceTree = "<group>"; };
+		8A454D352CB86993009436D9 /* PocketStoryState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PocketStoryState.swift; sourceTree = "<group>"; };
+		8A454D3B2CB9B061009436D9 /* LabelButtonHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelButtonHeaderView.swift; sourceTree = "<group>"; };
 		8A4593C32BF7BEC9002758DE /* MicrosurveyTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyTableViewCell.swift; sourceTree = "<group>"; };
 		8A4593C42BF7BECA002758DE /* MicrosurveyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyViewController.swift; sourceTree = "<group>"; };
 		8A4593C52BF7BECA002758DE /* MicrosurveyTableHeaderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MicrosurveyTableHeaderView.swift; sourceTree = "<group>"; };
@@ -7051,6 +7055,8 @@
 		8A880C432C63CFE200B77F23 /* MockLoginViewModelDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockLoginViewModelDelegate.swift; sourceTree = "<group>"; };
 		8A8917682B57283B008B01EA /* LegacyHomepageHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyHomepageHeaderCell.swift; sourceTree = "<group>"; };
 		8A8BAE152B2119E600D774EB /* InternalURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InternalURL.swift; sourceTree = "<group>"; };
+		8A8D277A2CBFFD710076AD3A /* BrowserNavigationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserNavigationType.swift; sourceTree = "<group>"; };
+		8A8D277C2CC000BE0076AD3A /* NavigationBrowserAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBrowserAction.swift; sourceTree = "<group>"; };
 		8A8DDEBE276259A900E7B97A /* RatingPromptManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RatingPromptManager.swift; sourceTree = "<group>"; };
 		8A93080827BFE88F0052167D /* PhotonActionSheetContainerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotonActionSheetContainerCell.swift; sourceTree = "<group>"; };
 		8A93080A27C01AD60052167D /* SingleActionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleActionViewModel.swift; sourceTree = "<group>"; };
@@ -10388,6 +10394,7 @@
 			children = (
 				5A2918CA2B522338002B197E /* GeneralBrowserAction.swift */,
 				7ADC1D182C27D35B003ED924 /* ActionProviderBuilder.swift */,
+				8A8D277C2CC000BE0076AD3A /* NavigationBrowserAction.swift */,
 			);
 			path = Actions;
 			sourceTree = "<group>";
@@ -10631,6 +10638,7 @@
 				81CAE4DA2B1A2C220040C78A /* BrowserViewControllerState.swift */,
 				81122E202B221AC0003DD9F8 /* SearchScreenState.swift */,
 				5A1947142B8FA9E0009C7A6C /* BrowserViewType.swift */,
+				8A8D277A2CBFFD710076AD3A /* BrowserNavigationType.swift */,
 			);
 			path = State;
 			sourceTree = "<group>";
@@ -11106,6 +11114,7 @@
 				8AA0A6622CAC40AA00AC7EB3 /* HomepageDiffableDataSource.swift */,
 				8AA0A6642CAC6B7100AC7EB3 /* HomepageSectionLayoutProvider.swift */,
 				8AF347DC2CADD0E100624036 /* Redux */,
+				8A454D3B2CB9B061009436D9 /* LabelButtonHeaderView.swift */,
 			);
 			path = "Homepage Rebuild";
 			sourceTree = "<group>";
@@ -11339,7 +11348,7 @@
 				8A454D312CB8170D009436D9 /* PocketManager.swift */,
 				8A454D2D2CB81668009436D9 /* PocketAction.swift */,
 				8A454D2B2CB81153009436D9 /* PocketStandardCell.swift */,
-				8A454D352CB86993009436D9 /* PocketItem.swift */,
+				8A454D352CB86993009436D9 /* PocketStoryState.swift */,
 			);
 			path = Pocket;
 			sourceTree = "<group>";
@@ -11532,7 +11541,7 @@
 			children = (
 				E17496362991A2480096900A /* SwiftUI */,
 				8AED23C427AC1F9500DE7E97 /* BaseContentStackView.swift */,
-				43AB6F9E25DC53D20016B015 /* LabelButtonHeaderView.swift */,
+				43AB6F9E25DC53D20016B015 /* LegacyLabelButtonHeaderView.swift */,
 				8A36BE2829EDBC6900AC1C5C /* ContentContainer.swift */,
 				8ACE9BFA2A54A010001E7A73 /* ExpandButtonState.swift */,
 				8A0D32832A61E1CC007D976D /* StatusBarOverlay.swift */,
@@ -15549,6 +15558,7 @@
 				1DFE57FF27BAE3150025DE58 /* HomepageSectionType.swift in Sources */,
 				C2D1A10D2A66C70000205DCC /* BookmarksCoordinator.swift in Sources */,
 				8C46E1B72B2209F000F56521 /* FakespotAdsEvent.swift in Sources */,
+				8A8D277D2CC000BE0076AD3A /* NavigationBrowserAction.swift in Sources */,
 				396E38F11EE0C8EC00CC180F /* FxAPushMessageHandler.swift in Sources */,
 				8A76B01629F6EB3900A82607 /* ScreenshotService.swift in Sources */,
 				8C1953322B85EAB500761B20 /* AutofillHeaderView.swift in Sources */,
@@ -15758,6 +15768,7 @@
 				43D00493296FC48F00CB0F31 /* CreditCardSettingsEmptyView.swift in Sources */,
 				CEFA977E1FAA6B490016F365 /* SyncContentSettingsViewController.swift in Sources */,
 				C8CD80DC2A1E8C970097C3AE /* OnboardingTelemetryUtility.swift in Sources */,
+				8A8D277B2CBFFD710076AD3A /* BrowserNavigationType.swift in Sources */,
 				96C11E9B2864C2DD00840E7C /* DependencyHelper.swift in Sources */,
 				8CE1E4382B8C76C80026530B /* LoginListViewModel.swift in Sources */,
 				0B8BF3722CA2DA4600E9812D /* EditBookmarkViewController.swift in Sources */,
@@ -15932,7 +15943,7 @@
 				CA7FC7D324A6A9B70012F347 /* PasswordManagerDataSourceHelper.swift in Sources */,
 				0E6C1E252C90B0E0001A43BB /* PasswordGeneratorMiddleware.swift in Sources */,
 				8A5BC1EB2C4AA13F009A40A4 /* FeatureFlagsBoolSetting.swift in Sources */,
-				43AB6FA425DC53D30016B015 /* LabelButtonHeaderView.swift in Sources */,
+				43AB6FA425DC53D30016B015 /* LegacyLabelButtonHeaderView.swift in Sources */,
 				43D16B7C29831CD0009F8279 /* CreditCardItemRow.swift in Sources */,
 				39673BC12B6D82F400653F4A /* FxNimbusMessaging.swift in Sources */,
 				965C3C942933A860006499ED /* LaunchSessionProvider.swift in Sources */,
@@ -16137,7 +16148,7 @@
 				274A36CE239EB9EC00A21587 /* LibraryViewController+LibraryPanelDelegate.swift in Sources */,
 				C869912D28917688007ACC5C /* WallpaperImageLoader.swift in Sources */,
 				96A5F73829928B3700234E5F /* GeneralizedImageFetcher.swift in Sources */,
-				8A454D362CB86993009436D9 /* PocketItem.swift in Sources */,
+				8A454D362CB86993009436D9 /* PocketStoryState.swift in Sources */,
 				1D7B78992ADF328E0011E9F2 /* AppEvent.swift in Sources */,
 				43F7952525795F69005AEE40 /* SearchTelemetry.swift in Sources */,
 				E65075541E37F6FC006961AC /* LegacyDynamicFontHelper.swift in Sources */,
@@ -16204,6 +16215,7 @@
 				D31F95E91AC226CB005C9F3B /* ScreenshotHelper.swift in Sources */,
 				8A5D1CA62A30D6BD005AD35C /* NewTabPageSetting.swift in Sources */,
 				D3968F251A38FE8500CEFD3B /* TabManager.swift in Sources */,
+				8A454D3C2CB9B061009436D9 /* LabelButtonHeaderView.swift in Sources */,
 				2178A6A229145506002EC290 /* ReaderModeFontSizeLabel.swift in Sources */,
 				8A4593C82BF7BECA002758DE /* MicrosurveyViewController.swift in Sources */,
 				8ADC2A1D2A33999800543DAA /* VersionSetting.swift in Sources */,

@@ -5,7 +5,7 @@
 import Foundation
 
 /// Converts the pocket story model to be presentable for the `PocketStandardCell` view
-class PocketItem: Equatable, Hashable {
+class PocketStoryState: Equatable, Hashable {
     private let story: PocketStory
 
     init(story: PocketStory) {
@@ -13,6 +13,7 @@ class PocketItem: Equatable, Hashable {
     }
 
     var title: String { story.title }
+    var url: URL? { story.url }
     var imageURL: URL { story.imageURL }
     var description: String {
         if let sponsor = story.sponsor {
@@ -34,7 +35,7 @@ class PocketItem: Equatable, Hashable {
     }
 
     // MARK: - Equatable
-    static func == (lhs: PocketItem, rhs: PocketItem) -> Bool {
+    static func == (lhs: PocketStoryState, rhs: PocketStoryState) -> Bool {
         lhs.story == rhs.story
     }
 

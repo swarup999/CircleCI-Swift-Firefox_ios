@@ -2032,6 +2032,9 @@ class BrowserViewController: UIViewController,
             handleNavigationActions(for: state)
         case _ where state.displayView != nil:
             handleDisplayActions(for: state)
+        case _ where state.navigationDestination != nil:
+            guard let destination = state.navigationDestination else { return }
+            handleNavigation(to: destination)
         default: break
         }
     }
@@ -2045,6 +2048,19 @@ class BrowserViewController: UIViewController,
                                    windowUUID: windowUUID,
                                    actionType: ToolbarActionType.backForwardButtonStateChanged)
         store.dispatch(action)
+    }
+
+    private func handleNavigation(to type: NavigationDestination) {
+        switch type.destination {
+        case .customizeHomepage:
+            navigationHandler?.show(settings: .homePage)
+        case .link:
+            guard let url = type.urlToVisit else {
+                logger.log("Url is nil, when there should ", level: .warning, category: .coordinator)
+                return
+            }
+            homePanel(didSelectURL: url, visitType: .link, isGoogleTopSite: false)
+        }
     }
 
     private func handleDisplayActions(for state: BrowserViewControllerState) {
