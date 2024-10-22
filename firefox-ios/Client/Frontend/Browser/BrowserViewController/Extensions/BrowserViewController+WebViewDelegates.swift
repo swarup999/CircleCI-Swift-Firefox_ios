@@ -437,7 +437,7 @@ extension BrowserViewController: WKNavigationDelegate {
         // gives us the exact same behaviour as Safari.
         if ["sms", "tel", "facetime", "facetime-audio"].contains(url.scheme) {
             if url.scheme == "sms" { // All the other types show a native prompt
-                showSnackbar(forExternalUrl: url, tab: tab) { isOk in
+                presentExternalAppAlert(forExternalUrl: url) { isOk in
                     guard isOk else { return }
                     UIApplication.shared.open(url, options: [:])
                 }
@@ -489,7 +489,7 @@ extension BrowserViewController: WKNavigationDelegate {
 
         // Handles custom mailto URL schemes.
         if url.scheme == "mailto" {
-            showSnackbar(forExternalUrl: url, tab: tab) { isOk in
+            presentExternalAppAlert(forExternalUrl: url) { isOk in
                 guard isOk else { return }
 
                 if let mailToMetadata = url.mailToMetadata(),
@@ -557,7 +557,7 @@ extension BrowserViewController: WKNavigationDelegate {
         }
 
         if !(url.scheme?.contains("firefox") ?? true) {
-            showSnackbar(forExternalUrl: url, tab: tab) { isOk in
+            presentExternalAppAlert(forExternalUrl: url) { isOk in
                 guard isOk else { return }
                 UIApplication.shared.open(url, options: [:]) { openedURL in
                     // Do not show error message for JS navigated links or 
@@ -925,27 +925,39 @@ private extension BrowserViewController {
     }
 
     // Use for sms and mailto links, which do not show a confirmation before opening.
-    func showSnackbar(forExternalUrl url: URL, tab: Tab, completion: @escaping (Bool) -> Void) {
-        let snackBar = TimerSnackBar(text: .ExternalLinkGenericConfirmation + "\n\(url.absoluteString)", img: nil)
-        let ok = SnackButton(title: .OKString, accessibilityIdentifier: "AppOpenExternal.button.ok") { bar in
-            tab.removeSnackbar(bar)
-            completion(true)
-        }
-        let cancel = SnackButton(
-            title: .CancelString,
-            accessibilityIdentifier: "AppOpenExternal.button.cancel"
-        ) { bar in
-            tab.removeSnackbar(bar)
-            completion(false)
-        }
-        let theme = currentTheme()
-        ok.applyTheme(theme: theme)
-        cancel.applyTheme(theme: theme)
-        snackBar.applyTheme(theme: theme)
+    func presentExternalAppAlert(forExternalUrl url: URL, completion: @escaping (Bool) -> Void) {
+        let title: String = {
+            if let shortDomain = url.domainURL.shortDomain,
+               (shortDomain.allSatisfy { $0.isLetter || $0.isNumber }),
+               let firstLetter = shortDomain.first?.uppercased() {
+                return String(format: .ExternalLinkSpecificAppConfirmation, "\(firstLetter)\(shortDomain.dropFirst())")
+            }
+            return .ExternalLinkGenericConfirmation
+        }()
 
-        snackBar.addButton(ok)
-        snackBar.addButton(cancel)
-        tab.addSnackbar(snackBar)
+        let alert = UIAlertController(
+            title: title,
+            message: "",
+            preferredStyle: .alert
+        )
+
+        alert.addAction(UIAlertAction(
+            title: .CancelString,
+            style: .cancel,
+            handler: { _ in
+                completion(false)
+            }
+        ))
+
+        alert.addAction(UIAlertAction(
+            title: .OKString,
+            style: .default,
+            handler: { _ in
+                completion(true)
+            }
+        ))
+
+        present(alert, animated: true)
     }
 
     func shouldRequestBeOpenedAsPopup(_ request: URLRequest) -> Bool {

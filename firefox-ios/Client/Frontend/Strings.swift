@@ -4753,6 +4753,11 @@ extension String {
         tableName: nil,
         value: "Open this link in external app?",
         comment: "Question shown to user when tapping an SMS or MailTo link that opens the external app for those.")
+    public static let ExternalLinkSpecificAppConfirmation = MZLocalizedString(
+        key: "ExternalLink.AppStore.SpecificAppConfirmationTitle.v134",
+        tableName: nil,
+        value: "Open this link in %@ app?",
+        comment: "Question shown to user when tapping an SMS or MailTo link that opens the external app for those. The placeholder will have the value of the app name in cause. (e.g Youtube, Instagram)")
 }
 
 // MARK: Enhanced Tracking Protection/Unified Trust Panel
