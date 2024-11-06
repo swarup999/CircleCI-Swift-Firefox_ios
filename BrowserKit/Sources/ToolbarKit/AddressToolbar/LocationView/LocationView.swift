@@ -265,7 +265,7 @@ final class LocationView: UIView,
         urlTextField.placeholder = state.urlTextFieldPlaceholder
         urlAbsolutePath = state.url?.absoluteString
 
-        let shouldShowKeyboard = state.isEditing && !state.isScrollingDuringEdit
+        let shouldShowKeyboard = state.isEditing
         _ = shouldShowKeyboard ? becomeFirstResponder() : resignFirstResponder()
 
         // Remove the default drop interaction from the URL text field so that our
@@ -282,7 +282,7 @@ final class LocationView: UIView,
         urlTextField.text = text
 
         // Start overlay mode & select text when in edit mode with a search term
-        if shouldShowKeyboard == true && state.shouldSelectSearchTerm == true {
+        if shouldShowKeyboard, state.shouldSelectSearchTerm {
             DispatchQueue.main.async {
                 self.urlTextField.text = text
                 self.urlTextField.selectAll(nil)
