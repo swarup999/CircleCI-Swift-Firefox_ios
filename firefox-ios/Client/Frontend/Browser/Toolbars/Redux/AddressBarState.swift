@@ -182,6 +182,9 @@ struct AddressBarState: StateType, Equatable {
         case ToolbarActionType.didStartTyping:
             return handleDidStartTypingAction(state: state, action: action)
 
+        case SearchEngineSelectionMiddlewareActionType.didSelectAlternativeSearchEngine:
+            return handleDidSelectAlternativeSearchEngineAction(state: state, action: action)
+
         default:
             return handleDefaultAction(state: state)
         }
@@ -643,6 +646,32 @@ struct AddressBarState: StateType, Equatable {
             isLoading: state.isLoading,
             readerModeState: state.readerModeState,
             didStartTyping: true,
+            showQRPageAction: state.showQRPageAction
+        )
+    }
+
+    private static func handleDidSelectAlternativeSearchEngineAction(state: Self, action: Action) -> Self {
+        guard action is SearchEngineSelectionAction else { return state }
+
+        // Focus the toolbar if the user has just changed the current search engine selection. Once the user unfocuses the
+        // toolbar (even if no search has been made), the app should revert back to the default engine.
+        return AddressBarState(
+            windowUUID: state.windowUUID,
+            navigationActions: state.navigationActions,
+            pageActions: state.pageActions,
+            browserActions: state.browserActions,
+            borderPosition: state.borderPosition,
+            url: state.url,
+            searchTerm: state.searchTerm,
+            lockIconImageName: state.lockIconImageName,
+            lockIconNeedsTheming: state.lockIconNeedsTheming,
+            safeListedURLImageName: state.safeListedURLImageName,
+            isEditing: true,
+            isScrollingDuringEdit: state.isScrollingDuringEdit,
+            shouldSelectSearchTerm: state.shouldSelectSearchTerm,
+            isLoading: state.isLoading,
+            readerModeState: state.readerModeState,
+            didStartTyping: state.didStartTyping,
             showQRPageAction: state.showQRPageAction
         )
     }
