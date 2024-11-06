@@ -31,4 +31,5 @@ enum SearchEngineSelectionActionType: ActionType {
 
 enum SearchEngineSelectionMiddlewareActionType: ActionType {
     case didSelectAlternativeSearchEngine
+    case didClearAlternativeSearchEngine
 }

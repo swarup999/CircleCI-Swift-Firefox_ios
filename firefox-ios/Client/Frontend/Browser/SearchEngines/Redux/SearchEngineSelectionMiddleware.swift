@@ -20,10 +20,10 @@ final class SearchEngineSelectionMiddleware {
     }
 
     lazy var searchEngineSelectionProvider: Middleware<AppState> = { [self] state, action in
-        guard let action = action as? SearchEngineSelectionAction else { return }
-
         switch action.actionType {
         case SearchEngineSelectionActionType.viewDidLoad:
+            guard let action = action as? SearchEngineSelectionAction else { return }
+
             guard let searchEngines = searchEnginesManager.orderedEngines, !searchEngines.isEmpty else {
                 // The SearchEngineManager should have loaded these by now, but if not, attempt to fetch the search engines
                 self.searchEnginesManager.getOrderedEngines { [weak self] searchEngines in
@@ -35,11 +35,22 @@ final class SearchEngineSelectionMiddleware {
             notifyDidLoad(windowUUID: action.windowUUID, searchEngines: searchEngines)
 
         case SearchEngineSelectionActionType.didTapSearchEngine:
-            let action = SearchEngineSelectionAction(
+            guard let action = action as? SearchEngineSelectionAction else { return }
+
+            let didSelectAction = SearchEngineSelectionAction(
                 windowUUID: action.windowUUID,
                 actionType: SearchEngineSelectionMiddlewareActionType.didSelectAlternativeSearchEngine
             )
-            store.dispatch(action)
+            store.dispatch(didSelectAction)
+
+        case ToolbarActionType.cancelEdit:
+            guard let action = action as? ToolbarAction else { return }
+
+            let didClearAction = SearchEngineSelectionAction(
+                windowUUID: action.windowUUID,
+                actionType: SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine
+            )
+            store.dispatch(didClearAction)
 
         default:
             break

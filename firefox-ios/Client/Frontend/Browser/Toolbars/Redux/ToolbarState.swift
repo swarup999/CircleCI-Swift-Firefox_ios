@@ -153,6 +153,9 @@ struct ToolbarState: ScreenState, Equatable {
         case SearchEngineSelectionMiddlewareActionType.didSelectAlternativeSearchEngine:
             return handleDidSelectAlternativeSearchEngine(state: state, action: action)
 
+        case SearchEngineSelectionMiddlewareActionType.didClearAlternativeSearchEngine:
+            return handleDidClearAlternativeSearchEngine(state: state, action: action)
+
         default:
             return state
         }
@@ -416,6 +419,28 @@ struct ToolbarState: ScreenState, Equatable {
             canShowDataClearanceAction: state.canShowDataClearanceAction,
             canShowNavigationHint: state.canShowNavigationHint,
             alternativeSearchEngine: state.alternativeSearchEngine
+        )
+    }
+
+    private static func handleDidClearAlternativeSearchEngine(state: Self, action: Action) -> ToolbarState {
+        guard let searchEngineSelectionAction = action as? SearchEngineSelectionAction else { return state }
+
+        return ToolbarState(
+            windowUUID: state.windowUUID,
+            toolbarPosition: state.toolbarPosition,
+            isPrivateMode: state.isPrivateMode,
+            addressToolbar: AddressBarState.reducer(state.addressToolbar, searchEngineSelectionAction),
+            navigationToolbar: NavigationBarState.reducer(state.navigationToolbar, searchEngineSelectionAction),
+            isShowingNavigationToolbar: state.isShowingNavigationToolbar,
+            isShowingTopTabs: state.isShowingTopTabs,
+            canGoBack: state.canGoBack,
+            canGoForward: state.canGoForward,
+            numberOfTabs: state.numberOfTabs,
+            showMenuWarningBadge: state.showMenuWarningBadge,
+            isNewTabFeatureEnabled: state.isNewTabFeatureEnabled,
+            canShowDataClearanceAction: state.canShowDataClearanceAction,
+            canShowNavigationHint: state.canShowNavigationHint,
+            alternativeSearchEngine: nil
         )
     }
 
