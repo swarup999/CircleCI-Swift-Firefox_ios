@@ -15,7 +15,8 @@ public class BrowserAddressToolbar: UIView,
                                     AddressToolbar,
                                     ThemeApplicable,
                                     LocationViewDelegate,
-                                    UIDragInteractionDelegate {
+                                    UIDragInteractionDelegate,
+                                    ToolbarStackHelper {
     private enum UX {
         static let horizontalEdgeSpace: CGFloat = 16
         static let verticalEdgeSpace: CGFloat = 8
@@ -283,17 +284,6 @@ public class BrowserAddressToolbar: UIView,
                 toolbarDelegate?.configureContextualHint(self, for: button, with: contextualHintType)
             }
         }
-    }
-
-    private func newOrExistingToolbarButton(for element: ToolbarElement,
-                                            existingButtons: [ToolbarButton]) -> ToolbarButton {
-        let existingButton = existingButtons.first { $0.isButtonFor(toolbarElement: element) }
-
-        guard let existingButton else {
-            return element.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
-        }
-
-        return existingButton
     }
 
     private func updateActionSpacing() {
