@@ -10,7 +10,7 @@ public protocol BrowserNavigationToolbarDelegate: AnyObject {
 }
 
 /// Navigation toolbar implementation.
-public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicable {
+public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicable, ToolbarStackHelper {
     private enum UX {
         static let horizontalEdgeSpace: CGFloat = 16
         static let buttonSize = CGSize(width: 48, height: 48)
@@ -70,9 +70,15 @@ public class BrowserNavigationToolbar: UIView, NavigationToolbar, ThemeApplicabl
     }
 
     private func updateActionStack(toolbarElements: [ToolbarElement]) {
+        let existingButtons = actionStack.arrangedSubviews.compactMap { $0 as? ToolbarButton }
         actionStack.removeAllArrangedViews()
+
         toolbarElements.forEach { toolbarElement in
-            let button = toolbarElement.numberOfTabs != nil ? TabNumberButton() : ToolbarButton()
+            // find existing button or create new one
+            // we do this to avoid having a new button every time we re-configure the navigation toolbar
+            // as this can result in button taps not resulting in correct action because the action
+            // as the reference to an old and not displayed button (e.g. the menu that is displayed from the menu button)
+            let button = newOrExistingToolbarButton(for: toolbarElement, existingButtons: existingButtons)
             button.configure(element: toolbarElement)
             actionStack.addArrangedSubview(button)
 
